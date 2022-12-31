@@ -1,0 +1,12 @@
+<svg width="255" height="183" viewBox="0 0 255 183" fill="none" xmlns="http://www.w3.org/2000/svg">
+<circle cx="126" cy="108" r="75" fill="black"/>
+<ellipse cx="180" cy="73" rx="75" ry="73" fill="white"/>
+<path d="M147 5L150.143 14.6738H160.315L152.086 20.6525L155.229 30.3262L147 24.3475L138.771 30.3262L141.914 20.6525L133.685 14.6738H143.857L147 5Z" fill="black"/>
+<path d="M194.5 28L195.959 32.4914H200.682L196.861 35.2672L198.321 39.7586L194.5 36.9828L190.679 39.7586L192.139 35.2672L188.318 32.4914H193.041L194.5 28Z" fill="black"/>
+<path d="M186.5 69L188.857 76.2553H196.486L190.314 80.7394L192.672 87.9947L186.5 83.5106L180.328 87.9947L182.686 80.7394L176.514 76.2553H184.143L186.5 69Z" fill="black"/>
+<rect x="126" y="111" width="129" height="41" rx="20" fill="white"/>
+<rect x="90" y="138" width="129" height="24" rx="12" fill="white"/>
+<rect x="150" y="160" width="69" height="13" rx="6.5" fill="white"/>
+<rect x="93.5454" y="142" width="93.5454" height="36.8333" rx="18.4167" transform="rotate(180 93.5454 142)" fill="white"/>
+<rect x="105" y="125" width="82.0909" height="34" rx="17" transform="rotate(180 105 125)" fill="white"/>
+</svg>
