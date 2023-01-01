@@ -108,44 +108,6 @@ function getCoordinates(dataIn) {
         fetchWeather(coordArray, ["current_weather=true", "timezone=auto"], createView);
     }
 }
-// function getCoordinates(dataIn, e) {
-
-//     const data = dataIn;
-//     let index = e.target.id;
-//     const coordArray = [];
-
-//     coordArray.push(data.results[index].latitude);
-//     coordArray.push(data.results[index].longitude);
-//     coordArray.push(data.results[index].name);
-
-//     console.log(coordArray);
-
-//     list.innerHTML = "";
-
-//     fetchWeather(coordArray, createView);
-// }
-// Gets weather data
-// async function fetchWeather(coordinatesIn, callback) {
-
-//     const endpoint = new URL(`https://api.open-meteo.com/v1/forecast?latitude=${coordinatesIn[0]}&longitude=${coordinatesIn[1]}&current_weather=true&timezone=auto`);
-
-//     spinner.style.display = "block";
-
-//     const response = await fetch(endpoint);
-
-//     if(response === 400) {
-//         alert("Error");
-//         return;
-//     }
-
-//     const data = await response.json();
-
-//     const locationName = coordinatesIn[2];
-
-//     spinner.style.display = "none";
-
-//     callback(data, locationName);
-// }
 
 async function fetchWeather(coordinatesIn, APIParams, callback) {
 
