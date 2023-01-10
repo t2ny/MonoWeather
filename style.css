@@ -38,18 +38,21 @@ main {
 button {
     background: none;
     border: none;
-    border-bottom: thin solid #fff;
+    background-color: #fff;
     font-family: 'Courier Prime', monospace;
-    padding: 0;
+    padding: 3px;
+    transition: background-color ease-in-out 200ms, color 250ms;
 }
 
 .selected {
-    border-bottom: thin solid #000;
+    background-color: #000;
+    color: #fff;
 }
 
 .nav-bar button:hover {
     cursor: pointer;
-    border-bottom: thin solid #000;
+    background-color: #000;
+    color: #fff;
 }
 
 .info-container {
