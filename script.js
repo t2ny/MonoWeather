@@ -4,6 +4,8 @@ const list = document.querySelector(".search-result-list");
 const spinner = document.querySelector(".spinner");
 const searchPage = document.querySelector(".search-wrapper");
 const mainPage = document.querySelector("main");
+const hourlyPage = document.querySelector(".hourly-view");
+const currentPage = document.querySelector(".current-view");
 const body = document.querySelector("body");
 const darkModeBtn = document.querySelector(".dark-mode-btn");
 const lightModeBtn = document.querySelector(".light-mode-btn");
@@ -18,8 +20,26 @@ searchBar.addEventListener("keypress", function(e) {
 // Navigation bar search button
 document.querySelector(".cancel-btn").addEventListener("click", function() {
     mainPage.style.display = "none";
+    currentPage.style.display = "block";
+    hourlyPage.style.display = "none";
     searchPage.style.display = "flex";
+    document.querySelector(".hourly-btn").classList.remove("selected");
+    document.querySelector(".current-btn").classList.add("selected");
     searchBar.select();
+})
+// Hourly weather button
+document.querySelector(".hourly-btn").addEventListener("click", function() {
+    currentPage.style.display = "none";
+    hourlyPage.style.display = "flex";
+    document.querySelector(".hourly-btn").classList.add("selected");
+    document.querySelector(".current-btn").classList.remove("selected");
+})
+// Current weather button
+document.querySelector(".current-btn").addEventListener("click", function() {
+    currentPage.style.display = "block";
+    hourlyPage.style.display = "none";
+    document.querySelector(".hourly-btn").classList.remove("selected");
+    document.querySelector(".current-btn").classList.add("selected");
 })
 // Turn on and off dark mode
 darkModeBtn.addEventListener("click", function() {
