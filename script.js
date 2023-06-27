@@ -10,15 +10,17 @@ const body = document.querySelector("body");
 const darkModeBtn = document.querySelector(".dark-mode-btn");
 const lightModeBtn = document.querySelector(".light-mode-btn");
 
+let coordArray = [];
+
 searchBtn.addEventListener("click", getGeo);
 
-searchBar.addEventListener("keypress", function(e) {
-    if(e.key === "Enter") {
+searchBar.addEventListener("keypress", function (e) {
+    if (e.key === "Enter") {
         getGeo();
     }
 })
 // Navigation bar search button
-document.querySelector(".cancel-btn").addEventListener("click", function() {
+document.querySelector(".cancel-btn").addEventListener("click", function () {
     mainPage.style.display = "none";
     currentPage.style.display = "block";
     hourlyPage.style.display = "none";
@@ -28,39 +30,41 @@ document.querySelector(".cancel-btn").addEventListener("click", function() {
     searchBar.select();
 })
 // Hourly weather button
-document.querySelector(".hourly-btn").addEventListener("click", function() {
+document.querySelector(".hourly-btn").addEventListener("click", function () {
     currentPage.style.display = "none";
     hourlyPage.style.display = "flex";
     document.querySelector(".hourly-btn").classList.add("selected");
     document.querySelector(".current-btn").classList.remove("selected");
+
+    fetchWeather(coordArray, ["hourly=temperature_2m,weathercode", "forecast_days=1"], createHourlyView);
 })
 // Current weather button
-document.querySelector(".current-btn").addEventListener("click", function() {
+document.querySelector(".current-btn").addEventListener("click", function () {
     currentPage.style.display = "block";
     hourlyPage.style.display = "none";
     document.querySelector(".hourly-btn").classList.remove("selected");
     document.querySelector(".current-btn").classList.add("selected");
 })
 // Turn on and off dark mode
-darkModeBtn.addEventListener("click", function() {
+darkModeBtn.addEventListener("click", function () {
     body.style.filter = "invert(100%)";
     lightModeBtn.style.display = "block";
     darkModeBtn.style.display = "none";
 })
 
-lightModeBtn.addEventListener("click", function() {
+lightModeBtn.addEventListener("click", function () {
     body.style.filter = "none";
     darkModeBtn.style.display = "block";
     lightModeBtn.style.display = "none";
 })
 
 async function getGeo() {
-    
+
     console.log(searchBar.value);
     // Clear the list
     list.innerHTML = "";
 
-    if(searchBar.value == "") {
+    if (searchBar.value == "") {
         const errorItem = document.createElement("li");
         errorItem.innerHTML = "Please enter a city.";
         errorItem.style.color = "black";
@@ -74,7 +78,7 @@ async function getGeo() {
 
     const response = await fetch(endpoint);
 
-    if(response === 400) {
+    if (response === 400) {
         alert("Error");
         return
     }
@@ -91,7 +95,7 @@ function displayList(dataIn) {
     const data = dataIn;
     console.log(data.results);
 
-    if(data.results == undefined) {
+    if (data.results == undefined) {
         const errorItem = document.createElement("li");
         errorItem.innerHTML = "Please try a different city.";
         list.appendChild(errorItem);
@@ -99,7 +103,7 @@ function displayList(dataIn) {
         return;
     }
 
-    for(let i=0; i<data.results.length; i++) {
+    for (let i = 0; i < data.results.length; i++) {
         const listItem = document.createElement("li");
         listItem.id = i;
         // Refactored with a closure.
@@ -112,10 +116,10 @@ function displayList(dataIn) {
 }
 // Gets coordinates of location with target ID. Refactored with a closure.
 function getCoordinates(dataIn) {
-    return function(e) {
+    return function (e) {
         const data = dataIn;
         let index = e.target.id;
-        const coordArray = [];
+        coordArray = [];
 
         coordArray.push(data.results[index].latitude);
         coordArray.push(data.results[index].longitude);
@@ -143,7 +147,7 @@ async function fetchWeather(coordinatesIn, APIParams, callback) {
 
     const response = await fetch(endpoint);
 
-    if(response === 400) {
+    if (response === 400) {
         alert("Error");
         return;
     }
@@ -180,10 +184,55 @@ function createView(dataIn, locationNameIn) {
     // const iconCondition = getWeatherIcon("1", "2022-12-21T21:00");
     const iconCondition = getWeatherIcon(data.current_weather.weathercode, data.current_weather.time);
     console.log(iconCondition);
-    
+
     weatherItems[0].style.backgroundImage = `url(${iconCondition[0]})`;
     weatherItems[1].innerHTML = `${Math.round(data.current_weather.temperature)}°C`;
-    weatherItems[2].innerHTML = `${iconCondition[1]}`;   
+    weatherItems[2].innerHTML = `${iconCondition[1]}`;
+}
+
+// Populate hourly view with data
+function createHourlyView(dataIn, locationNameIn) {
+
+    const data = dataIn['hourly'];
+    const locationName = locationNameIn;
+    const hourlyTable = document.querySelector('.hourly-table');
+
+    console.log(data);
+
+    document.querySelector(".hourly-title").textContent = `${locationName} 24 Hour Forecast:`;
+
+    for (let i = 0; i < data['time'].length; i++) {
+        const iconCondition = getWeatherIcon(data['weathercode'][i], data['time'][i]);
+        const tableItem = createTableItem(data['time'][i], data['temperature_2m'][i], iconCondition);
+        hourlyTable.appendChild(tableItem);
+    }
+}
+
+function createTableItem(time, temperature, weatherImage) {
+    const tableItem = document.createElement('div');
+    const timeLabel = document.createElement('p');
+    const weatherInfo = document.createElement('div');
+    const tempLabel = document.createElement('p');
+    const weatherImg = document.createElement('div');
+
+    tableItem.classList.add('table-item');
+    timeLabel.classList.add('time-label');
+    weatherInfo.classList.add('hourly-weather-info');
+    tempLabel.classList.add('temp-label');
+    weatherImg.classList.add('weather-img-hourly');
+
+    timeLabel.textContent = `${new Date(time).getHours()}:00`;
+    tempLabel.textContent = `${Math.round(temperature)}°C`;
+
+    weatherImg.style.backgroundImage = `url(${weatherImage[0]})`;
+
+    weatherInfo.appendChild(tempLabel);
+    weatherInfo.appendChild(weatherImg);
+
+    tableItem.appendChild(timeLabel);
+    tableItem.appendChild(weatherInfo);
+
+    return tableItem;
 }
 
 function getWeatherIcon(weatherCodeIn, timeIn) {
@@ -195,15 +244,15 @@ function getWeatherIcon(weatherCodeIn, timeIn) {
 
     console.log(code);
 
-    if(code == "0" && (hour < 6 || hour >= 18)) {
+    if (code == "0" && (hour < 6 || hour >= 18)) {
         return ["images/Night_Clear.svg", "Clear Sky"];
     }
 
-    if((code == "1" || code == "2") && (hour < 6 || hour >= 18)) {
+    if ((code == "1" || code == "2") && (hour < 6 || hour >= 18)) {
         return ["images/Night_Cloudy.svg", "Partly Cloudy"];
     }
 
-    switch(code) {
+    switch (code) {
         case 0:
             icon.push("images/Sunny.svg");
             icon.push("Clear Sky");
@@ -267,5 +316,5 @@ function getWeatherIcon(weatherCodeIn, timeIn) {
     }
 
     return icon;
-    
+
 }

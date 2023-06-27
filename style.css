@@ -85,6 +85,16 @@ button {
     margin-bottom: 2%;
 }
 
+.weather-img-hourly {
+    width: 30px;
+    height: 30px;
+    background-image: url(images/Snow.svg);
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    margin-bottom: 2%;
+}
+
 .txt-temperature {
     font-size: 84px;
     letter-spacing: -8px;
@@ -217,6 +227,10 @@ footer button:hover {
     margin-right: 60px;
 }
 
+.search-results::-webkit-scrollbar {
+    background: none;
+}
+
 ul {
     list-style: none;
     padding: 0;
@@ -263,6 +277,7 @@ li:hover {
     display: none;
     justify-content: center;
     padding-top: 3%;
+    font-size: 24px;
 }
 
 .hourly-table {
@@ -270,13 +285,24 @@ li:hover {
     flex-direction: column;
     border: solid 2px #000;
     border-radius: 10px;
-    height: 80vh;
+    max-height: 80vh;
     width: 35vw;
-    overflow: scroll;
+    padding-left: 6px;
+    overflow-y: scroll;
+}
+
+.hourly-table::-webkit-scrollbar {
+    width: 6px;
+}
+
+.hourly-table::-webkit-scrollbar-thumb {
+    background-color: #000000;
+    border-radius: 5px;
 }
 
 .table-item {
     display: flex;
+    justify-content: space-between;
     border-top: solid 2px #000;
     padding: 4%;
 }
@@ -284,4 +310,10 @@ li:hover {
 .title-item {
     font-size: 24px;
     padding: 4%;
+}
+
+.hourly-weather-info {
+    display: flex;
+    align-items: center;
+    gap: 1em;
 }
