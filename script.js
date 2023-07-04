@@ -33,6 +33,7 @@ document.querySelector(".cancel-btn").addEventListener("click", function () {
 document.querySelector(".hourly-btn").addEventListener("click", function () {
     currentPage.style.display = "none";
     hourlyPage.style.display = "flex";
+    hourlyPage.style.flexDirection = "column";
     document.querySelector(".hourly-btn").classList.add("selected");
     document.querySelector(".current-btn").classList.remove("selected");
 
@@ -199,11 +200,17 @@ function createHourlyView(dataIn, locationNameIn) {
 
     console.log(data);
 
+    hourlyTable.innerHTML = '';
+
     document.querySelector(".hourly-title").textContent = `${locationName} 24 Hour Forecast:`;
 
     for (let i = 0; i < data['time'].length; i++) {
         const iconCondition = getWeatherIcon(data['weathercode'][i], data['time'][i]);
         const tableItem = createTableItem(data['time'][i], data['temperature_2m'][i], iconCondition);
+
+        // Make sure the first table item does not have a top border
+        if (i == 0) { tableItem.style.borderTop = "none"; }
+
         hourlyTable.appendChild(tableItem);
     }
 }
@@ -221,7 +228,11 @@ function createTableItem(time, temperature, weatherImage) {
     tempLabel.classList.add('temp-label');
     weatherImg.classList.add('weather-img-hourly');
 
-    timeLabel.textContent = `${new Date(time).getHours()}:00`;
+    let hour = new Date(time).getHours();
+    let AmPm = hour >= 12 ? 'PM' : 'AM';
+    hour = (hour % 12) || 12;
+
+    timeLabel.textContent = `${hour}:00 ${AmPm}`;
     tempLabel.textContent = `${Math.round(temperature)}°C`;
 
     weatherImg.style.backgroundImage = `url(${weatherImage[0]})`;

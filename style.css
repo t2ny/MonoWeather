@@ -41,6 +41,7 @@ button {
     background-color: #fff;
     font-family: 'Courier Prime', monospace;
     padding: 3px;
+    padding-top: 4px;
     transition: background-color ease-in-out 200ms, color 250ms;
 }
 
@@ -282,6 +283,7 @@ li:hover {
 .hourly-view {
     display: none;
     justify-content: center;
+    align-items: center;
     padding-top: 3%;
     font-size: 24px;
 }
@@ -315,8 +317,10 @@ li:hover {
 }
 
 .title-item {
-    font-size: 24px;
-    padding: 4%;
+    font-size: 26px;
+    width: 35vw;
+    padding-bottom: 0.5em;
+    padding-left: 0.25em;
 }
 
 .hourly-weather-info {
