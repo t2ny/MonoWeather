@@ -6,6 +6,7 @@ const searchPage = document.querySelector(".search-wrapper");
 const mainPage = document.querySelector("main");
 const hourlyPage = document.querySelector(".hourly-view");
 const currentPage = document.querySelector(".current-view");
+const dailyPage = document.querySelector(".daily-view");
 const body = document.querySelector("body");
 const darkModeBtn = document.querySelector(".dark-mode-btn");
 const lightModeBtn = document.querySelector(".light-mode-btn");
@@ -24,18 +25,22 @@ document.querySelector(".cancel-btn").addEventListener("click", function () {
     mainPage.style.display = "none";
     currentPage.style.display = "block";
     hourlyPage.style.display = "none";
+    dailyPage.style.display = 'none';
     searchPage.style.display = "flex";
     document.querySelector(".hourly-btn").classList.remove("selected");
+    document.querySelector(".daily-btn").classList.remove("selected");
     document.querySelector(".current-btn").classList.add("selected");
     searchBar.select();
 })
 // Hourly weather button
 document.querySelector(".hourly-btn").addEventListener("click", function () {
     currentPage.style.display = "none";
+    dailyPage.style.display = 'none';
     hourlyPage.style.display = "flex";
     hourlyPage.style.flexDirection = "column";
     document.querySelector(".hourly-btn").classList.add("selected");
     document.querySelector(".current-btn").classList.remove("selected");
+    document.querySelector(".daily-btn").classList.remove("selected");
 
     fetchWeather(coordArray, ["hourly=temperature_2m,weathercode", "forecast_days=1"], createHourlyView);
 })
@@ -43,9 +48,23 @@ document.querySelector(".hourly-btn").addEventListener("click", function () {
 document.querySelector(".current-btn").addEventListener("click", function () {
     currentPage.style.display = "block";
     hourlyPage.style.display = "none";
+    dailyPage.style.display = 'none';
     document.querySelector(".hourly-btn").classList.remove("selected");
+    document.querySelector(".daily-btn").classList.remove("selected");
     document.querySelector(".current-btn").classList.add("selected");
 })
+// Daily weather button
+document.querySelector('.daily-btn').addEventListener('click', function () {
+    dailyPage.style.display = 'flex';
+    currentPage.style.display = 'none';
+    hourlyPage.style.display = 'none';
+    document.querySelector(".hourly-btn").classList.remove("selected");
+    document.querySelector(".current-btn").classList.remove("selected");
+    document.querySelector(".daily-btn").classList.add("selected");
+
+    fetchWeather(coordArray, ["daily=temperature_2m_max,temperature_2m_min,weathercode", "timezone=auto"], createDailyView);
+})
+
 // Turn on and off dark mode
 darkModeBtn.addEventListener("click", function () {
     body.style.filter = "invert(100%)";
@@ -198,8 +217,6 @@ function createHourlyView(dataIn, locationNameIn) {
     const locationName = locationNameIn;
     const hourlyTable = document.querySelector('.hourly-table');
 
-    console.log(data);
-
     hourlyTable.innerHTML = '';
 
     document.querySelector(".hourly-title").textContent = `${locationName} 24 Hour Forecast:`;
@@ -228,6 +245,7 @@ function createTableItem(time, temperature, weatherImage) {
     tempLabel.classList.add('temp-label');
     weatherImg.classList.add('weather-img-hourly');
 
+    // Convert 24h to 12h time format
     let hour = new Date(time).getHours();
     let AmPm = hour >= 12 ? 'PM' : 'AM';
     hour = (hour % 12) || 12;
@@ -244,6 +262,66 @@ function createTableItem(time, temperature, weatherImage) {
     tableItem.appendChild(weatherInfo);
 
     return tableItem;
+}
+
+// Populate daily weather view with data
+function createDailyView(dataIn, locationNameIn) {
+
+    const data = dataIn['daily'];
+    const dailyGridView = document.querySelector('.daily-grid-view');
+
+    dailyGridView.innerHTML = '';
+
+    document.querySelector('.daily-title').textContent = `${locationNameIn} Next 7 Days:`;
+
+    for (let i = 0; i < data['time'].length; i++) {
+        const gridItem = createDailyGridItem(data, i);
+        dailyGridView.appendChild(gridItem);
+    }
+
+}
+
+function createDailyGridItem(dataIn, index) {
+    const card = document.createElement('div');
+    const dayLabel = document.createElement('p');
+    const dateLabel = document.createElement('p');
+    const descLabel = document.createElement('p');
+    const weatherImg = document.createElement('div');
+    const hiTemp = document.createElement('p');
+    const lowTemp = document.createElement('p');
+
+    card.classList.add('daily-card');
+    dayLabel.classList.add('lbl-day');
+    weatherImg.classList.add('weather-icon');
+    hiTemp.classList.add('hi-temp');
+    lowTemp.classList.add('low-temp');
+
+    const weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    // Replace 2023-07-05 to 2023/07/05 because javascript date is one day off
+    const dateTime = new Date(dataIn['time'][index].replace('-', '/'));
+
+    const day = weekDays[dateTime.getDay()];
+    const date = dataIn['time'][index].substring(5);
+
+    dayLabel.textContent = day;
+    dateLabel.textContent = date;
+
+    const iconCondition = getWeatherIcon(dataIn['weathercode'][index], '1688569200');
+
+    descLabel.textContent = iconCondition[1].toString();
+    weatherImg.style.backgroundImage = `url(${iconCondition[0]})`;
+
+    hiTemp.textContent = `${Math.round(dataIn['temperature_2m_max'][index])}°`;
+    lowTemp.textContent = `${Math.round(dataIn['temperature_2m_min'][index])}°`;
+
+    card.appendChild(dayLabel);
+    card.appendChild(dateLabel);
+    card.appendChild(descLabel);
+    card.appendChild(weatherImg);
+    card.appendChild(hiTemp);
+    card.appendChild(lowTemp);
+
+    return card;
 }
 
 function getWeatherIcon(weatherCodeIn, timeIn) {

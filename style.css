@@ -313,7 +313,15 @@ li:hover {
     justify-content: space-between;
     border-top: solid 2px #000;
     padding: 4%;
+    font-weight: normal;
     align-items: center;
+    background-color: #fff;
+    filter: invert(0);
+    transition: filter ease-in-out 100ms;
+}
+
+.table-item:hover {
+    filter: invert(1);
 }
 
 .title-item {
@@ -327,4 +335,63 @@ li:hover {
     display: flex;
     align-items: center;
     gap: 1em;
+}
+
+/* Daily Weather View */
+.daily-view {
+    display: none;
+    flex-direction: column;
+    padding: 4%;
+}
+
+.daily-title {
+    font-size: 28px;
+    margin-bottom: 1%;
+}
+
+.daily-grid-view {
+    display: grid;
+    gap: 1.5em;
+    grid-template-columns: repeat(auto-fill, 200px);
+}
+
+.daily-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 200px;
+    height: 325px;
+    background-color: #fff;
+    border: solid 2px #000;
+    border-radius: 10px;
+    padding: 10%;
+    gap: 0.5em;
+    scale: 1;
+    transition: scale ease-in-out 50ms;
+}
+
+.daily-card:hover {
+    scale: 1.025;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}
+
+.lbl-day {
+    font-size: 30px;
+}
+
+.weather-icon {
+    height: 90px;
+    width: 90px;
+    background-image: url(images/Partly_Cloudy.svg);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
+.hi-temp, .low-temp {
+    font-size: 30px;
+}
+
+.low-temp {
+    color: #828282;
 }
