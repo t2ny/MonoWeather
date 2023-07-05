@@ -29,9 +29,8 @@ main {
 .nav-bar {
     display: flex;
     justify-content: flex-end;
-    padding-right: 1%;
-    padding-left: 1%;
-    padding-top: 1%;
+    padding: 1%;
+    /* border-bottom: thin solid #000; */
     gap: 15px;
 }
 
@@ -293,7 +292,7 @@ li:hover {
     flex-direction: column;
     border: solid 2px #000;
     border-radius: 10px;
-    max-height: 80vh;
+    max-height: 70vh;
     width: 35vw;
     padding-left: 6px;
     overflow-y: scroll;
@@ -346,7 +345,7 @@ li:hover {
 
 .daily-title {
     font-size: 28px;
-    margin-bottom: 1%;
+    margin-bottom: 2%;
 }
 
 .daily-grid-view {
