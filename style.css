@@ -131,6 +131,18 @@ footer button:hover {
 .filler {
     height: 20px;
     width: 20px;
+    background-image: url(images/info_black_48dp.svg);
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+}
+
+.info-popup {
+    display: none;
+    position: absolute;
+    left: 50px;
+    bottom: 50px;
+    text-align: left;
 }
 
 .dark-mode-btn {

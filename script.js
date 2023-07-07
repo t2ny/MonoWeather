@@ -78,6 +78,15 @@ lightModeBtn.addEventListener("click", function () {
     lightModeBtn.style.display = "none";
 })
 
+// Information button hover
+document.querySelector('.info-btn').addEventListener('mouseover', function () {
+    document.querySelector('.info-popup').style.display = 'block';
+})
+
+document.querySelector('.info-btn').addEventListener('mouseleave', function () {
+    document.querySelector('.info-popup').style.display = 'none';
+})
+
 async function getGeo() {
 
     console.log(searchBar.value);
