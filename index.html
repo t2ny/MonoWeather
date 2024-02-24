@@ -1,81 +1,74 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link
-      rel="icon"
-      href="images/Favicon5.svg"
-      media="(prefers-color-scheme: dark)"
-    />
-    <link
-      rel="icon"
-      href="images/Cloudy.svg"
-      media="(prefers-color-scheme: light)"
-    />
-    <link rel="stylesheet" href="style.css" />
-    <title>MonoWeather</title>
-  </head>
-  <body>
-    <div class="search-wrapper">
-      <p class="title">MonoWeather</p>
-      <div class="search-container">
-        <input type="text" class="search-bar" placeholder="e.g. Moncton" />
-        <button class="search-btn"></button>
-        <div id="loading-bar-spinner" class="spinner">
-          <div class="spinner-icon"></div>
-        </div>
-      </div>
-      <div class="search-results">
-        <ul class="search-result-list"></ul>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="images/Favicon5.svg" media="(prefers-color-scheme: dark)" />
+  <link rel="icon" href="images/Cloudy.svg" media="(prefers-color-scheme: light)" />
+  <link rel="stylesheet" href="style.css" />
+  <title>MonoWeather</title>
+</head>
+
+<body>
+  <div class="search-wrapper">
+    <p class="title">MonoWeather</p>
+    <div class="search-container">
+      <input type="text" class="search-bar" placeholder="e.g. Moncton" />
+      <button class="search-btn"></button>
+      <div id="loading-bar-spinner" class="spinner">
+        <div class="spinner-icon"></div>
       </div>
     </div>
-    <main>
-      <div class="nav-bar">
-        <button class="current-btn selected">Current</button>
-        <button class="hourly-btn">Hourly</button>
-        <button class="daily-btn">Daily</button>
-        <button class="cancel-btn">Search</button>
+    <div class="search-results">
+      <ul class="search-result-list"></ul>
+    </div>
+  </div>
+  <main>
+    <div class="nav-bar">
+      <button class="current-btn selected">Current</button>
+      <button class="hourly-btn">Hourly</button>
+      <button class="daily-btn">Daily</button>
+      <button class="cancel-btn">Search</button>
+    </div>
+    <div class="current-view">
+      <div class="info-container">
+        <p class="txt-location"><strong>Moncton Weather</strong></p>
+        <p class="txt-latitude">Latitude: 46.09</p>
+        <p class="txt-longitude">Longitude: -64.80</p>
+        <p class="txt-wind">Wind: 15 KM/H</p>
       </div>
-      <div class="current-view">
-        <div class="info-container">
-          <p class="txt-location"><strong>Moncton Weather</strong></p>
-          <p class="txt-latitude">Latitude: 46.09</p>
-          <p class="txt-longitude">Longitude: -64.80</p>
-          <p class="txt-wind">Wind: 15 KM/H</p>
-        </div>
-        <div class="weather-container">
-          <div class="weather-img"></div>
-          <p class="txt-temperature">1°C</p>
-          <p class="txt-condition">Snow</p>
-        </div>
+      <div class="weather-container">
+        <div class="weather-img"></div>
+        <p class="txt-temperature">1°C</p>
+        <p class="txt-condition">Snow</p>
       </div>
-      <div class="hourly-view">
-        <div class="title-item">
-          <p class="hourly-title"></p>
-        </div>
-        <div class="hourly-table"></div>
+    </div>
+    <div class="hourly-view">
+      <div class="title-item">
+        <p class="hourly-title"></p>
       </div>
-      <div class="daily-view">
-        <p class="daily-title"></p>
-        <div class="daily-grid-view"></div>
-      </div>
-    </main>
-    <footer>
-      <p class="info-popup">
-        A simple weather app inspired by typewriters and <br />
-        early computers using monospaced fonts.
-      </p>
-      <div class="filler info-btn"></div>
-      <p>
-        <a href="https://open-meteo.com/en" target="_blank"
-          >Data provided by Open-Meteo.com</a
-        >
-      </p>
-      <button class="dark-mode-btn"></button>
-      <button class="light-mode-btn"></button>
-    </footer>
-  </body>
-  <script src="script.js"></script>
+      <div class="hourly-table"></div>
+    </div>
+    <div class="daily-view">
+      <p class="daily-title"></p>
+      <div class="daily-grid-view"></div>
+    </div>
+  </main>
+  <footer>
+    <p class="info-popup">
+      A simple weather app inspired by typewriters and <br />
+      early computers using monospaced fonts.
+    </p>
+    <div class="filler info-btn"></div>
+    <p>
+      <a href="https://open-meteo.com/en" target="_blank">Data provided by Open-Meteo.com</a>
+    </p>
+    <button class="dark-mode-btn"></button>
+    <button class="light-mode-btn"></button>
+  </footer>
+</body>
+<script src="script.js"></script>
+
 </html>

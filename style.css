@@ -107,16 +107,14 @@ button {
 footer {
     display: flex;
     justify-content: space-between;
-    position: absolute;
-    /* background-color: aqua; */
+    position: fixed;
+    background-color: white;
     text-align: center;
     font-size: 14px;
     width: 100vw;
     left: 0;
     bottom: 0;
-    padding-bottom: 1%;
-    padding-right: 1%;
-    padding-left: 1%;
+    padding: 1%;
 }
 
 footer a {
@@ -279,15 +277,22 @@ li:hover {
 #loading-bar-spinner.spinner .spinner-icon {
     width: 40px;
     height: 40px;
-    border:  solid 4px transparent;
-    border-top-color:  #000 !important;
+    border: solid 4px transparent;
+    border-top-color: #000 !important;
     border-left-color: #000 !important;
     border-radius: 50%;
 }
 
 @keyframes loading-bar-spinner {
-  0%   { transform: rotate(0deg);   transform: rotate(0deg); }
-  100% { transform: rotate(360deg); transform: rotate(360deg); }
+    0% {
+        transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
 }
 
 /* Hourly weather page */
@@ -399,7 +404,8 @@ li:hover {
     background-size: contain;
 }
 
-.hi-temp, .low-temp {
+.hi-temp,
+.low-temp {
     font-size: 30px;
 }
 
