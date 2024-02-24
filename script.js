@@ -4,43 +4,96 @@ const list = document.querySelector(".search-result-list");
 const spinner = document.querySelector(".spinner");
 const searchPage = document.querySelector(".search-wrapper");
 const mainPage = document.querySelector("main");
+const hourlyPage = document.querySelector(".hourly-view");
+const currentPage = document.querySelector(".current-view");
+const dailyPage = document.querySelector(".daily-view");
 const body = document.querySelector("body");
 const darkModeBtn = document.querySelector(".dark-mode-btn");
 const lightModeBtn = document.querySelector(".light-mode-btn");
 
+let coordArray = [];
+
 searchBtn.addEventListener("click", getGeo);
 
-searchBar.addEventListener("keypress", function(e) {
-    if(e.key === "Enter") {
+searchBar.addEventListener("keypress", function (e) {
+    if (e.key === "Enter") {
         getGeo();
     }
 })
 // Navigation bar search button
-document.querySelector(".cancel-btn").addEventListener("click", function() {
+document.querySelector(".cancel-btn").addEventListener("click", function () {
     mainPage.style.display = "none";
+    currentPage.style.display = "block";
+    hourlyPage.style.display = "none";
+    dailyPage.style.display = 'none';
     searchPage.style.display = "flex";
+    document.querySelector(".hourly-btn").classList.remove("selected");
+    document.querySelector(".daily-btn").classList.remove("selected");
+    document.querySelector(".current-btn").classList.add("selected");
     searchBar.select();
 })
+// Hourly weather button
+document.querySelector(".hourly-btn").addEventListener("click", function () {
+    currentPage.style.display = "none";
+    dailyPage.style.display = 'none';
+    hourlyPage.style.display = "flex";
+    hourlyPage.style.flexDirection = "column";
+    document.querySelector(".hourly-btn").classList.add("selected");
+    document.querySelector(".current-btn").classList.remove("selected");
+    document.querySelector(".daily-btn").classList.remove("selected");
+
+    fetchWeather(coordArray, ["hourly=temperature_2m,weathercode", "forecast_days=1"], createHourlyView);
+})
+// Current weather button
+document.querySelector(".current-btn").addEventListener("click", function () {
+    currentPage.style.display = "block";
+    hourlyPage.style.display = "none";
+    dailyPage.style.display = 'none';
+    document.querySelector(".hourly-btn").classList.remove("selected");
+    document.querySelector(".daily-btn").classList.remove("selected");
+    document.querySelector(".current-btn").classList.add("selected");
+})
+// Daily weather button
+document.querySelector('.daily-btn').addEventListener('click', function () {
+    dailyPage.style.display = 'flex';
+    currentPage.style.display = 'none';
+    hourlyPage.style.display = 'none';
+    document.querySelector(".hourly-btn").classList.remove("selected");
+    document.querySelector(".current-btn").classList.remove("selected");
+    document.querySelector(".daily-btn").classList.add("selected");
+
+    fetchWeather(coordArray, ["daily=temperature_2m_max,temperature_2m_min,weathercode", "timezone=auto"], createDailyView);
+})
+
 // Turn on and off dark mode
-darkModeBtn.addEventListener("click", function() {
+darkModeBtn.addEventListener("click", function () {
     body.style.filter = "invert(100%)";
     lightModeBtn.style.display = "block";
     darkModeBtn.style.display = "none";
 })
 
-lightModeBtn.addEventListener("click", function() {
+lightModeBtn.addEventListener("click", function () {
     body.style.filter = "none";
     darkModeBtn.style.display = "block";
     lightModeBtn.style.display = "none";
 })
 
+// Information button hover
+document.querySelector('.info-btn').addEventListener('mouseover', function () {
+    document.querySelector('.info-popup').style.display = 'block';
+})
+
+document.querySelector('.info-btn').addEventListener('mouseleave', function () {
+    document.querySelector('.info-popup').style.display = 'none';
+})
+
 async function getGeo() {
-    
+
     console.log(searchBar.value);
     // Clear the list
     list.innerHTML = "";
 
-    if(searchBar.value == "") {
+    if (searchBar.value == "") {
         const errorItem = document.createElement("li");
         errorItem.innerHTML = "Please enter a city.";
         errorItem.style.color = "black";
@@ -54,7 +107,7 @@ async function getGeo() {
 
     const response = await fetch(endpoint);
 
-    if(response === 400) {
+    if (response === 400) {
         alert("Error");
         return
     }
@@ -71,7 +124,7 @@ function displayList(dataIn) {
     const data = dataIn;
     console.log(data.results);
 
-    if(data.results == undefined) {
+    if (data.results == undefined) {
         const errorItem = document.createElement("li");
         errorItem.innerHTML = "Please try a different city.";
         list.appendChild(errorItem);
@@ -79,7 +132,7 @@ function displayList(dataIn) {
         return;
     }
 
-    for(let i=0; i<data.results.length; i++) {
+    for (let i = 0; i < data.results.length; i++) {
         const listItem = document.createElement("li");
         listItem.id = i;
         // Refactored with a closure.
@@ -92,10 +145,10 @@ function displayList(dataIn) {
 }
 // Gets coordinates of location with target ID. Refactored with a closure.
 function getCoordinates(dataIn) {
-    return function(e) {
+    return function (e) {
         const data = dataIn;
         let index = e.target.id;
-        const coordArray = [];
+        coordArray = [];
 
         coordArray.push(data.results[index].latitude);
         coordArray.push(data.results[index].longitude);
@@ -123,7 +176,7 @@ async function fetchWeather(coordinatesIn, APIParams, callback) {
 
     const response = await fetch(endpoint);
 
-    if(response === 400) {
+    if (response === 400) {
         alert("Error");
         return;
     }
@@ -160,10 +213,124 @@ function createView(dataIn, locationNameIn) {
     // const iconCondition = getWeatherIcon("1", "2022-12-21T21:00");
     const iconCondition = getWeatherIcon(data.current_weather.weathercode, data.current_weather.time);
     console.log(iconCondition);
-    
+
     weatherItems[0].style.backgroundImage = `url(${iconCondition[0]})`;
     weatherItems[1].innerHTML = `${Math.round(data.current_weather.temperature)}°C`;
-    weatherItems[2].innerHTML = `${iconCondition[1]}`;   
+    weatherItems[2].innerHTML = `${iconCondition[1]}`;
+}
+
+// Populate hourly view with data
+function createHourlyView(dataIn, locationNameIn) {
+
+    const data = dataIn['hourly'];
+    const locationName = locationNameIn;
+    const hourlyTable = document.querySelector('.hourly-table');
+
+    hourlyTable.innerHTML = '';
+
+    document.querySelector(".hourly-title").textContent = `${locationName} 24 Hour Forecast:`;
+
+    for (let i = 0; i < data['time'].length; i++) {
+        const iconCondition = getWeatherIcon(data['weathercode'][i], data['time'][i]);
+        const tableItem = createTableItem(data['time'][i], data['temperature_2m'][i], iconCondition);
+
+        // Make sure the first table item does not have a top border
+        if (i == 0) { tableItem.style.borderTop = "none"; }
+
+        hourlyTable.appendChild(tableItem);
+    }
+}
+
+function createTableItem(time, temperature, weatherImage) {
+    const tableItem = document.createElement('div');
+    const timeLabel = document.createElement('p');
+    const weatherInfo = document.createElement('div');
+    const tempLabel = document.createElement('p');
+    const weatherImg = document.createElement('div');
+
+    tableItem.classList.add('table-item');
+    timeLabel.classList.add('time-label');
+    weatherInfo.classList.add('hourly-weather-info');
+    tempLabel.classList.add('temp-label');
+    weatherImg.classList.add('weather-img-hourly');
+
+    // Convert 24h to 12h time format
+    let hour = new Date(time).getHours();
+    let AmPm = hour >= 12 ? 'PM' : 'AM';
+    hour = (hour % 12) || 12;
+
+    timeLabel.textContent = `${hour}:00 ${AmPm}`;
+    tempLabel.textContent = `${Math.round(temperature)}°C`;
+
+    weatherImg.style.backgroundImage = `url(${weatherImage[0]})`;
+
+    weatherInfo.appendChild(tempLabel);
+    weatherInfo.appendChild(weatherImg);
+
+    tableItem.appendChild(timeLabel);
+    tableItem.appendChild(weatherInfo);
+
+    return tableItem;
+}
+
+// Populate daily weather view with data
+function createDailyView(dataIn, locationNameIn) {
+
+    const data = dataIn['daily'];
+    const dailyGridView = document.querySelector('.daily-grid-view');
+
+    dailyGridView.innerHTML = '';
+
+    document.querySelector('.daily-title').textContent = `${locationNameIn} Next 7 Days:`;
+
+    for (let i = 0; i < data['time'].length; i++) {
+        const gridItem = createDailyGridItem(data, i);
+        dailyGridView.appendChild(gridItem);
+    }
+
+}
+
+function createDailyGridItem(dataIn, index) {
+    const card = document.createElement('div');
+    const dayLabel = document.createElement('p');
+    const dateLabel = document.createElement('p');
+    const descLabel = document.createElement('p');
+    const weatherImg = document.createElement('div');
+    const hiTemp = document.createElement('p');
+    const lowTemp = document.createElement('p');
+
+    card.classList.add('daily-card');
+    dayLabel.classList.add('lbl-day');
+    weatherImg.classList.add('weather-icon');
+    hiTemp.classList.add('hi-temp');
+    lowTemp.classList.add('low-temp');
+
+    const weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    // Replace 2023-07-05 to 2023/07/05 because javascript date is one day off
+    const dateTime = new Date(dataIn['time'][index].replace('-', '/'));
+
+    const day = weekDays[dateTime.getDay()];
+    const date = dataIn['time'][index].substring(5);
+
+    dayLabel.textContent = day;
+    dateLabel.textContent = date;
+
+    const iconCondition = getWeatherIcon(dataIn['weathercode'][index], '1688569200');
+
+    descLabel.textContent = iconCondition[1].toString();
+    weatherImg.style.backgroundImage = `url(${iconCondition[0]})`;
+
+    hiTemp.textContent = `${Math.round(dataIn['temperature_2m_max'][index])}°`;
+    lowTemp.textContent = `${Math.round(dataIn['temperature_2m_min'][index])}°`;
+
+    card.appendChild(dayLabel);
+    card.appendChild(dateLabel);
+    card.appendChild(descLabel);
+    card.appendChild(weatherImg);
+    card.appendChild(hiTemp);
+    card.appendChild(lowTemp);
+
+    return card;
 }
 
 function getWeatherIcon(weatherCodeIn, timeIn) {
@@ -175,15 +342,15 @@ function getWeatherIcon(weatherCodeIn, timeIn) {
 
     console.log(code);
 
-    if(code == "0" && (hour < 6 || hour >= 18)) {
+    if (code == "0" && (hour < 6 || hour >= 18)) {
         return ["images/Night_Clear.svg", "Clear Sky"];
     }
 
-    if((code == "1" || code == "2") && (hour < 6 || hour >= 18)) {
+    if ((code == "1" || code == "2") && (hour < 6 || hour >= 18)) {
         return ["images/Night_Cloudy.svg", "Partly Cloudy"];
     }
 
-    switch(code) {
+    switch (code) {
         case 0:
             icon.push("images/Sunny.svg");
             icon.push("Clear Sky");
@@ -247,5 +414,5 @@ function getWeatherIcon(weatherCodeIn, timeIn) {
     }
 
     return icon;
-    
+
 }

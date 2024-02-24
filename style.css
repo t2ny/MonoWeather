@@ -29,9 +29,8 @@ main {
 .nav-bar {
     display: flex;
     justify-content: flex-end;
-    padding-right: 1%;
-    padding-left: 1%;
-    padding-top: 1%;
+    padding: 1%;
+    /* border-bottom: thin solid #000; */
     gap: 15px;
 }
 
@@ -41,6 +40,7 @@ button {
     background-color: #fff;
     font-family: 'Courier Prime', monospace;
     padding: 3px;
+    padding-top: 4px;
     transition: background-color ease-in-out 200ms, color 250ms;
 }
 
@@ -85,6 +85,16 @@ button {
     margin-bottom: 2%;
 }
 
+.weather-img-hourly {
+    width: 30px;
+    height: 30px;
+    background-image: url(images/Snow.svg);
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    margin-bottom: 2%;
+}
+
 .txt-temperature {
     font-size: 84px;
     letter-spacing: -8px;
@@ -97,16 +107,14 @@ button {
 footer {
     display: flex;
     justify-content: space-between;
-    position: absolute;
-    /* background-color: aqua; */
+    position: fixed;
+    background-color: white;
     text-align: center;
     font-size: 14px;
     width: 100vw;
     left: 0;
     bottom: 0;
-    padding-bottom: 1%;
-    padding-right: 1%;
-    padding-left: 1%;
+    padding: 1%;
 }
 
 footer a {
@@ -121,6 +129,18 @@ footer button:hover {
 .filler {
     height: 20px;
     width: 20px;
+    background-image: url(images/info_black_48dp.svg);
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+}
+
+.info-popup {
+    display: none;
+    position: absolute;
+    left: 50px;
+    bottom: 50px;
+    text-align: left;
 }
 
 .dark-mode-btn {
@@ -217,6 +237,16 @@ footer button:hover {
     margin-right: 60px;
 }
 
+.search-results::-webkit-scrollbar {
+    background: none;
+    width: 6px;
+}
+
+.search-results::-webkit-scrollbar-thumb {
+    background-color: #000;
+    border-radius: 5px;
+}
+
 ul {
     list-style: none;
     padding: 0;
@@ -247,13 +277,138 @@ li:hover {
 #loading-bar-spinner.spinner .spinner-icon {
     width: 40px;
     height: 40px;
-    border:  solid 4px transparent;
-    border-top-color:  #000 !important;
+    border: solid 4px transparent;
+    border-top-color: #000 !important;
     border-left-color: #000 !important;
     border-radius: 50%;
 }
 
 @keyframes loading-bar-spinner {
-  0%   { transform: rotate(0deg);   transform: rotate(0deg); }
-  100% { transform: rotate(360deg); transform: rotate(360deg); }
+    0% {
+        transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+
+/* Hourly weather page */
+.hourly-view {
+    display: none;
+    justify-content: center;
+    align-items: center;
+    padding-top: 3%;
+    font-size: 24px;
+}
+
+.hourly-table {
+    display: flex;
+    flex-direction: column;
+    border: solid 2px #000;
+    border-radius: 10px;
+    max-height: 70vh;
+    width: 35vw;
+    padding-left: 6px;
+    overflow-y: scroll;
+}
+
+.hourly-table::-webkit-scrollbar {
+    width: 6px;
+}
+
+.hourly-table::-webkit-scrollbar-thumb {
+    background-color: #000000;
+    border-radius: 5px;
+}
+
+.table-item {
+    display: flex;
+    justify-content: space-between;
+    border-top: solid 2px #000;
+    padding: 4%;
+    font-weight: normal;
+    align-items: center;
+    background-color: #fff;
+    filter: invert(0);
+    transition: filter ease-in-out 100ms;
+}
+
+.table-item:hover {
+    filter: invert(1);
+}
+
+.title-item {
+    font-size: 26px;
+    width: 35vw;
+    padding-bottom: 0.5em;
+    padding-left: 0.25em;
+}
+
+.hourly-weather-info {
+    display: flex;
+    align-items: center;
+    gap: 1em;
+}
+
+/* Daily Weather View */
+.daily-view {
+    display: none;
+    flex-direction: column;
+    padding: 4%;
+}
+
+.daily-title {
+    font-size: 28px;
+    margin-bottom: 2%;
+}
+
+.daily-grid-view {
+    display: grid;
+    gap: 1.5em;
+    grid-template-columns: repeat(auto-fill, 200px);
+}
+
+.daily-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 200px;
+    height: 325px;
+    background-color: #fff;
+    border: solid 2px #000;
+    border-radius: 10px;
+    padding: 10%;
+    gap: 0.5em;
+    scale: 1;
+    transition: scale ease-in-out 50ms;
+}
+
+.daily-card:hover {
+    scale: 1.025;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}
+
+.lbl-day {
+    font-size: 30px;
+}
+
+.weather-icon {
+    height: 90px;
+    width: 90px;
+    background-image: url(images/Partly_Cloudy.svg);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
+.hi-temp,
+.low-temp {
+    font-size: 30px;
+}
+
+.low-temp {
+    color: #828282;
 }
